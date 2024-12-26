@@ -8,38 +8,46 @@ namespace UniversityTDD
 {
     public class ScheduleManager
     {
-        public Dictionary<string, List<ClassSession>> groupSchedules;
+        public Dictionary<string, List<ClassSession>> groupSchedules = new Dictionary<string, List<ClassSession>>();
 
-        public bool AddClass(string groupName, ClassSession classSession)
+        public void AddClass(string groupName, ClassSession classSession)
         {
             if (!groupSchedules.ContainsKey(groupName))
             {
                 groupSchedules[groupName] = new List<ClassSession>();
             }
 
-            if (groupSchedules[groupName].Any(c => c.StartTime < classSession.EndTime && c.EndTime > classSession.StartTime))
+            foreach (var session in groupSchedules[groupName])
             {
-                throw new InvalidOperationException("New class conflicts with an existing class.");
+                if ((classSession.StartTime < session.EndTime) && (classSession.EndTime > session.StartTime))
+                {
+                    throw new InvalidOperationException("Заняття конфліктує за часом з існуючим заняттям.");
+                }
             }
 
             groupSchedules[groupName].Add(classSession);
-            return true;
         }
 
-        public bool RemoveClass(string groupName, string subject)
+        public void RemoveClass(string groupName, string subject)
         {
-            if (!groupSchedules.ContainsKey(groupName) || !groupSchedules[groupName].Any(c => c.Subject == subject))
+            if (!groupSchedules.ContainsKey(groupName)) 
             {
-                throw new KeyNotFoundException("Class not found for removal.");
+                throw new InvalidOperationException("Група не знайдена.");
             }
 
-            groupSchedules[groupName].RemoveAll(c => c.Subject == subject);
-            return true;
+            var sessionToRemove = groupSchedules[groupName].Find(s => s.Subject == subject);
+
+            if (sessionToRemove == null) 
+            {
+                throw new InvalidOperationException("Заняття не знайдено.");
+            }
+
+            groupSchedules[groupName].Remove(sessionToRemove);
         }
 
         public List<ClassSession> GetClassesForGroup(string groupName)
         {
-            if (!groupSchedules.ContainsKey(groupName))
+            if (!groupSchedules.ContainsKey(groupName)) 
             {
                 return new List<ClassSession>();
             }

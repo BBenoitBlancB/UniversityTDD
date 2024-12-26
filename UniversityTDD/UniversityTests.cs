@@ -27,30 +27,26 @@ namespace UniversityTDD
         public void CreateClassSessionWithParams_ValidArguments_ReturnsValidResult()
         {
             //Arrange
-            string subject = "Math";
-            string teacher = "Dr. Smith";
-            string room = "Room 101";
-            DateTime startTime = DateTime.MinValue;
-            DateTime endTime = DateTime.MinValue.AddHours(1);
-            //Act
-            var actual = new ClassSession(subject, teacher, room, startTime, endTime);
-            //Assert
-            Assert.True(actual.Subject == subject &&
-                actual.Teacher == teacher &&
-                actual.Room == room &&
-                actual.StartTime == startTime &&
-                actual.EndTime == endTime);
+            var session = new ClassSession("Math", "John Doe", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
+            //Act-Assert
+            Assert.Equal("Math", session.Subject);
+            Assert.Equal("John Doe", session.Teacher);
+            Assert.Equal("Room 101", session.Room);
+            Assert.Equal(DateTime.MinValue, session.StartTime);
+            Assert.Equal(DateTime.MinValue.AddHours(1), session.EndTime);
         }
 
         [Fact]
         public void AddClass_ValidArguments_ReturnsValidResult()
         {
             //Arrange
-            string group = "Group A";
             var manager = new ScheduleManager();
-            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
-            //Act-Assert
-            Assert.True(manager.AddClass(group, session) == true);
+            var session = new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1));
+            //Act
+            manager.AddClass("Group A", session);
+            var classes = manager.GetClassesForGroup("Group A");
+            //Assert
+            Assert.Equal(1, classes.Count);
         }
 
         [Fact]
@@ -58,11 +54,13 @@ namespace UniversityTDD
         {
             //Arrange
             var manager = new ScheduleManager();
-            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
+            var session = new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1));
             //Act
             manager.AddClass("Group A", session);
+            manager.RemoveClass("Group A", "Math");
+            var classes = manager.GetClassesForGroup("Group A");
             //Assert
-            Assert.True(manager.RemoveClass("Group A", "Math") == true);
+            Assert.Equal(0, classes.Count);
         }
 
         [Fact]
@@ -70,12 +68,11 @@ namespace UniversityTDD
         {
             //Arrange
             var manager = new ScheduleManager();
-            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
             //Act
-            manager.AddClass("Group A", session);
+            manager.AddClass("Group A", new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1)));
             var classes = manager.GetClassesForGroup("Group A");
             //Assert
-            Assert.Equal(2, classes.Count);
+            Assert.Equal(1, classes.Count);
         }
     }
 }
