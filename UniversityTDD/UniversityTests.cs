@@ -14,7 +14,26 @@ namespace UniversityTDD
             DateTime startTime = DateTime.MinValue;
             DateTime endTime = DateTime.MinValue;
             //Act
-            ClassSession actual = new ClassSession();
+            var actual = new ClassSession();
+            //Assert
+            Assert.True(actual.Subject == subject &&
+                actual.Teacher == teacher &&
+                actual.Room == room &&
+                actual.StartTime == startTime &&
+                actual.EndTime == endTime);
+        }
+
+        [Fact]
+        public void CreateClassSessionWithParams_ValidArguments_ReturnsValidResult()
+        {
+            //Arrange
+            string subject = "Math";
+            string teacher = "Dr. Smith";
+            string room = "Room 101";
+            DateTime startTime = DateTime.MinValue;
+            DateTime endTime = DateTime.MinValue.AddHours(1);
+            //Act
+            var actual = new ClassSession(subject, teacher, room, startTime, endTime);
             //Assert
             Assert.True(actual.Subject == subject &&
                 actual.Teacher == teacher &&

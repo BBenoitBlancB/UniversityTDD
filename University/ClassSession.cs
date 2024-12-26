@@ -22,5 +22,14 @@ namespace UniversityTDD
             StartTime = DateTime.MinValue;
             EndTime = DateTime.MinValue;
         }
+
+        public ClassSession(string subject, string teacher, string room, DateTime startTime, DateTime endTime)
+        {
+            Subject = subject;
+            Teacher = teacher;
+            Room = room;
+            StartTime = startTime;
+            EndTime = endTime;
+        }
     }
 }
