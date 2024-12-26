@@ -64,5 +64,18 @@ namespace UniversityTDD
             //Assert
             Assert.True(manager.RemoveClass("Group A", "Math") == true);
         }
+
+        [Fact]
+        public void GetClassesForGroup_ValidArguments_ReturnsValidResult()
+        {
+            //Arrange
+            var manager = new ScheduleManager();
+            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
+            //Act
+            manager.AddClass("Group A", session);
+            var classes = manager.GetClassesForGroup("Group A");
+            //Assert
+            Assert.Equal(2, classes.Count);
+        }
     }
 }

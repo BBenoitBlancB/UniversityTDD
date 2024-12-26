@@ -36,5 +36,15 @@ namespace UniversityTDD
             groupSchedules[groupName].RemoveAll(c => c.Subject == subject);
             return true;
         }
+
+        public List<ClassSession> GetClassesForGroup(string groupName)
+        {
+            if (!groupSchedules.ContainsKey(groupName))
+            {
+                return new List<ClassSession>();
+            }
+
+            return groupSchedules[groupName];
+        }
     }
 }
