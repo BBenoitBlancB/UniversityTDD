@@ -41,5 +41,18 @@ namespace UniversityTDD
                 actual.StartTime == startTime &&
                 actual.EndTime == endTime);
         }
+
+        [Fact]
+        public void AddClass_ValidArguments_ReturnsValidResult()
+        {
+            //Arrange
+            string group = "Group A";
+            var manager = new ScheduleManager();
+            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
+            //Act
+            manager.AddClass(group, session);
+            //Assert
+            Assert.True(manager.groupSchedules[group].Equals(session) == true);
+        }
     }
 }
