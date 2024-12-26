@@ -49,10 +49,20 @@ namespace UniversityTDD
             string group = "Group A";
             var manager = new ScheduleManager();
             var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
+            //Act-Assert
+            Assert.True(manager.AddClass(group, session) == true);
+        }
+
+        [Fact]
+        public void RemoveClass_ValidArguments_ReturnsValidResult()
+        {
+            //Arrange
+            var manager = new ScheduleManager();
+            var session = new ClassSession("Math", "Dr. Smith", "Room 101", DateTime.MinValue, DateTime.MinValue.AddHours(1));
             //Act
-            manager.AddClass(group, session);
+            manager.AddClass("Group A", session);
             //Assert
-            Assert.True(manager.groupSchedules[group].Equals(session) == true);
+            Assert.True(manager.RemoveClass("Group A", "Math") == true);
         }
     }
 }

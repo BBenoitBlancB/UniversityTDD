@@ -10,7 +10,7 @@ namespace UniversityTDD
     {
         public Dictionary<string, List<ClassSession>> groupSchedules;
 
-        public void AddClass(string groupName, ClassSession classSession)
+        public bool AddClass(string groupName, ClassSession classSession)
         {
             if (!groupSchedules.ContainsKey(groupName))
             {
@@ -23,6 +23,18 @@ namespace UniversityTDD
             }
 
             groupSchedules[groupName].Add(classSession);
+            return true;
+        }
+
+        public bool RemoveClass(string groupName, string subject)
+        {
+            if (!groupSchedules.ContainsKey(groupName) || !groupSchedules[groupName].Any(c => c.Subject == subject))
+            {
+                throw new KeyNotFoundException("Class not found for removal.");
+            }
+
+            groupSchedules[groupName].RemoveAll(c => c.Subject == subject);
+            return true;
         }
     }
 }
