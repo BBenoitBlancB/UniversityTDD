@@ -83,46 +83,61 @@ namespace UniversityTDD
         }
 
         [Fact]
-        public void RemoveClass_ValidArguments_ReturnsValidResult()
-        {
-            //Arrange
-            var manager = new ScheduleManager();
-            var session = new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1));
-            //Act
-            manager.AddClass("Group A", session);
-            manager.RemoveClass("Group A", "Math");
-            var classes = manager.GetClassesForGroup("Group A");
-            //Assert
-            Assert.Equal(0, classes.Count);
-        }
-
-        [Fact]
-        public void RemoveClass_GroupNotFound_ThrowsInvalidOperationException()
+        public void RemoveClass_ShouldRemoveClass_WhenClassExists()
         {
             // Arrange
             var manager = new ScheduleManager();
-            string groupName = "NonExistentGroup";
-            string subject = "Math";
+            var groupName = "Group A";
+            var classSession = new ClassSession
+            {
+                Subject = "Math",
+                StartTime = new DateTime(2024, 12, 30, 10, 0, 0),
+                EndTime = new DateTime(2024, 12, 30, 11, 0, 0)
+            };
+
+            manager.AddClass(groupName, classSession);
+
+            // Act
+            manager.RemoveClass(groupName, "Math");
+
+            // Assert
+            var classes = manager.GetClassesForGroup(groupName);
+            Assert.Empty(classes);
+        }
+
+        [Fact]
+        public void RemoveClass_ShouldThrowException_WhenGroupDoesNotExist()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            var groupName = "Nonexistent Group";
 
             // Act
             var exception = Assert.Throws<InvalidOperationException>(() =>
-                manager.RemoveClass(groupName, subject));
+                manager.RemoveClass(groupName, "Math"));
 
             // Assert
             Assert.Equal("Група не знайдена.", exception.Message);
         }
 
         [Fact]
-        public void RemoveClass_SubjectNotFound_ThrowsInvalidOperationException()
+        public void RemoveClass_ShouldThrowException_WhenClassDoesNotExist()
         {
             // Arrange
             var manager = new ScheduleManager();
-            string groupName = "Group A";
-            string subject = "NonExistentSubject";
+            var groupName = "Group A";
+            var classSession = new ClassSession
+            {
+                Subject = "Math",
+                StartTime = new DateTime(2024, 12, 30, 10, 0, 0),
+                EndTime = new DateTime(2024, 12, 30, 11, 0, 0)
+            };
+
+            manager.AddClass(groupName, classSession);
 
             // Act
             var exception = Assert.Throws<InvalidOperationException>(() =>
-                manager.RemoveClass(groupName, subject));
+                manager.RemoveClass(groupName, "Science"));
 
             // Assert
             Assert.Equal("Заняття не знайдено.", exception.Message);
