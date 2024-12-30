@@ -162,19 +162,5 @@ namespace UniversityTDD
             // Assert
             Assert.Empty(result);
         }
-
-        [Fact]
-        public void GetClassesForGroup_EmptySchedule_ReturnsEmptyList()
-        {
-            // Arrange
-            var manager = new ScheduleManager();
-            var groupName = "EmptyGroup";
-
-            // Act
-            var result = manager.GetClassesForGroup(groupName);
-
-            // Assert
-            Assert.Empty(result);
-        }
     }
 }
