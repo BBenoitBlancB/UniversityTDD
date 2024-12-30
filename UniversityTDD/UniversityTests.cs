@@ -79,7 +79,6 @@ namespace UniversityTDD
             manager.AddClass("GroupB", classSession);
 
             // Assert
-            // No exception should be thrown; if we reach here the test passes.
             Assert.True(true);
         }
 
@@ -95,6 +94,22 @@ namespace UniversityTDD
             var classes = manager.GetClassesForGroup("Group A");
             //Assert
             Assert.Equal(0, classes.Count);
+        }
+
+        [Fact]
+        public void RemoveClass_GroupNotFound_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            string groupName = "NonExistentGroup";
+            string subject = "Math";
+
+            // Act
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                manager.RemoveClass(groupName, subject));
+
+            // Assert
+            Assert.Equal("Група не знайдена.", exception.Message);
         }
 
         [Fact]
