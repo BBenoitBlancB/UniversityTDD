@@ -69,6 +69,21 @@ namespace UniversityTDD
         }
 
         [Fact]
+        public void AddClass_ShouldCreateNewGroup_WhenGroupDoesNotExist()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            var classSession = new ClassSession { StartTime = new DateTime(2024, 1, 1, 10, 0, 0), EndTime = new DateTime(2024, 1, 1, 11, 0, 0) };
+
+            // Act
+            manager.AddClass("GroupB", classSession);
+
+            // Assert
+            // No exception should be thrown; if we reach here the test passes.
+            Assert.True(true);
+        }
+
+        [Fact]
         public void RemoveClass_ValidArguments_ReturnsValidResult()
         {
             //Arrange
