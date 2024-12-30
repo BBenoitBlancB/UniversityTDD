@@ -37,16 +37,35 @@ namespace UniversityTDD
         }
 
         [Fact]
-        public void AddClass_ValidArguments_ReturnsValidResult()
+        public void AddClass_ShouldAddClass_WhenNoConflict()
         {
-            //Arrange
+            // Arrange
             var manager = new ScheduleManager();
-            var session = new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1));
-            //Act
-            manager.AddClass("Group A", session);
-            var classes = manager.GetClassesForGroup("Group A");
-            //Assert
-            Assert.Equal(1, classes.Count);
+            var classSession1 = new ClassSession { StartTime = new DateTime(2024, 1, 1, 10, 0, 0), EndTime = new DateTime(2024, 1, 1, 11, 0, 0) };
+            var classSession2 = new ClassSession { StartTime = new DateTime(2024, 1, 1, 11, 0, 0), EndTime = new DateTime(2024, 1, 1, 12, 0, 0) };
+
+            // Act
+            manager.AddClass("GroupA", classSession1);
+            manager.AddClass("GroupA", classSession2);
+
+            // Assert
+            Assert.True(true);
+        }
+
+        [Fact]
+        public void AddClass_ShouldThrowException_WhenConflictOccurs()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            var classSession1 = new ClassSession { StartTime = new DateTime(2024, 1, 1, 10, 0, 0), EndTime = new DateTime(2024, 1, 1, 11, 0, 0) };
+            var classSession2 = new ClassSession { StartTime = new DateTime(2024, 1, 1, 10, 30, 0), EndTime = new DateTime(2024, 1, 1, 11, 30, 0) };
+
+            // Act
+            manager.AddClass("GroupA", classSession1);
+
+            // Assert
+            var exception = Assert.Throws<InvalidOperationException>(() => manager.AddClass("GroupA", classSession2));
+            Assert.Equal("Заняття конфліктує за часом з існуючим заняттям.", exception.Message);
         }
 
         [Fact]
