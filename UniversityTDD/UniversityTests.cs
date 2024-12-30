@@ -129,15 +129,52 @@ namespace UniversityTDD
         }
 
         [Fact]
-        public void GetClassesForGroup_ValidArguments_ReturnsValidResult()
+        public void GetClassesForGroup_ExistingGroup_ReturnsCorrectClasses()
         {
-            //Arrange
+            // Arrange
             var manager = new ScheduleManager();
-            //Act
-            manager.AddClass("Group A", new ClassSession("Math", "John Doe", "Room 101", DateTime.Now, DateTime.Now.AddHours(1)));
-            var classes = manager.GetClassesForGroup("Group A");
-            //Assert
-            Assert.Equal(1, classes.Count);
+            var groupName = "GroupA";
+            var classSession1 = new ClassSession { Subject = "Math", StartTime = new DateTime(2024, 1, 1, 10, 0, 0), EndTime = new DateTime(2024, 1, 1, 11, 0, 0) };
+            var classSession2 = new ClassSession { Subject = "English", StartTime = new DateTime(2024, 1, 1, 12, 0, 0), EndTime = new DateTime(2024, 1, 1, 13, 0, 0) };
+
+            manager.AddClass(groupName, classSession1);
+            manager.AddClass(groupName, classSession2);
+
+            // Act
+            var result = manager.GetClassesForGroup(groupName);
+
+            // Assert
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, cs => cs.Subject == "Math");
+            Assert.Contains(result, cs => cs.Subject == "English");
+        }
+
+        [Fact]
+        public void GetClassesForGroup_NonExistingGroup_ReturnsEmptyList()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            var groupName = "NonExistingGroup";
+
+            // Act
+            var result = manager.GetClassesForGroup(groupName);
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void GetClassesForGroup_EmptySchedule_ReturnsEmptyList()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            var groupName = "EmptyGroup";
+
+            // Act
+            var result = manager.GetClassesForGroup(groupName);
+
+            // Assert
+            Assert.Empty(result);
         }
     }
 }
