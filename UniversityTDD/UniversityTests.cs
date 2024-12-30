@@ -113,6 +113,22 @@ namespace UniversityTDD
         }
 
         [Fact]
+        public void RemoveClass_SubjectNotFound_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var manager = new ScheduleManager();
+            string groupName = "Group A";
+            string subject = "NonExistentSubject";
+
+            // Act
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                manager.RemoveClass(groupName, subject));
+
+            // Assert
+            Assert.Equal("Заняття не знайдено.", exception.Message);
+        }
+
+        [Fact]
         public void GetClassesForGroup_ValidArguments_ReturnsValidResult()
         {
             //Arrange
